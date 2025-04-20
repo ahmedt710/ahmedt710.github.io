@@ -1,82 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FIFA SBC Bruteforcer</title>
-</head>
-<body>
-    <h1>⚡ SBC Bruteforcer Tool</h1>
+<html lang="en"
+  ><head
+    ><title>Tiny Sociable Dragonfly</title
+    ><meta property="og:title" content="Tiny Sociable Dragonfly" /><meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    /><meta charset="utf-8" /><meta
+      property="twitter:card"
+      content="summary_large_image"
+    />
 
-    <h2>Enter Your Inventory</h2>
-    <textarea id="inventoryInput" rows="10" cols="50" placeholder="Example: 88: 3, 89: 2, 90: 1"></textarea>
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;  -webkit-font-smoothing: antialiased;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;  color: inherit;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}details {  display: block;  margin: 0;  padding: 0;}summary::-webkit-details-marker {  display: none;}[data-thq="accordion"] [data-thq="accordion-content"] {  max-height: 0;  overflow: hidden;  transition: max-height 0.3s ease-in-out;  padding: 0;}[data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {  max-height: 1000vh;}details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {  transform: rotate(180deg);}html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Inter;
+        font-size: 16px;
+      }
 
-    <h2>Enter Squad Requirements</h2>
-    <textarea id="sbcInput" rows="5" cols="50" placeholder="Example: 90: 2, 89: 1"></textarea>
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.15;
+        color: var(--dl-color-theme-neutral-dark);
+        background: var(--dl-color-theme-neutral-light);
 
-    <br><br>
-    <button onclick="submitToLambda()">Submit and Solve 🔥</button>
+        fill: var(--dl-color-theme-neutral-dark);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/animate.css@4.1.1/animate.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css"
+    />
+  </head>
+  <body
+    ><link rel="stylesheet" href="./style.css" /><div
+      ><link href="./index.css" rel="stylesheet" /><div class="home-container1"
+        ><div
+          ><div class="home-container3"
+            ><script>
+                        (function(){
+                  async function submitToLambda() {
+                      const inventoryText = document.getElementById('inventoryInput').value;
+                      const sbcText = document.getElementById('sbcInput').value;
+                      const resultsDiv = document.getElementById('results');
 
-    <h2>Results:</h2>
-    <pre id="results"></pre>
+                      // Parse inventory and SBC input
+                      const inventory = parseInputToJSON(inventoryText);
+                      const sbcRequirements = parseInputToJSON(sbcText);
 
-    <script>
-        async function submitToLambda() {
-            const inventoryText = document.getElementById('inventoryInput').value;
-            const sbcText = document.getElementById('sbcInput').value;
-            const resultsDiv = document.getElementById('results');
+                      console.log('Parsed Inventory:', inventory);
+                      console.log('Parsed SBC Requirements:', sbcRequirements);
 
-            // Parse inventory and SBC input
-            const inventory = parseInputToJSON(inventoryText);
-            const sbcRequirements = parseInputToJSON(sbcText);
+                      const payload = {
+                          inventory: inventory,
+                          sbc_requirements: sbcRequirements
+                      };
 
-            console.log("Parsed Inventory:", inventory);
-            console.log("Parsed SBC Requirements:", sbcRequirements);
+                      resultsDiv.innerHTML = 'Submitting... please wait 🔄';
 
-            const payload = {
-                inventory: inventory,
-                sbc_requirements: sbcRequirements
-            };
+                      try {
+                          const response = await fetch('https://your-api-id.amazonaws.com/build-squad', {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(payload)
+                          });
 
-            resultsDiv.innerHTML = "Submitting... please wait 🔄";
+                          if (!response.ok) {
+                              throw new Error(`API call failed with status ${response.status}`);
+                          }
 
-            try {
-                const response = await fetch("https://your-api-id.amazonaws.com/build-squad", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
+                          const result = await response.json();
+                          console.log('Lambda Response:', result);
 
-                if (!response.ok) {
-                    throw new Error(`API call failed with status ${response.status}`);
-                }
+                          resultsDiv.innerHTML = JSON.stringify(result, null, 2);
+                      } catch (error) {
+                          console.error('Error sending to Lambda:', error);
+                          resultsDiv.innerHTML = '❌ Error: ' + error.message;
+                      }
+                  }
 
-                const result = await response.json();
-                console.log("Lambda Response:", result);
-
-                resultsDiv.innerHTML = JSON.stringify(result, null, 2);
-            } catch (error) {
-                console.error("Error sending to Lambda:", error);
-                resultsDiv.innerHTML = "❌ Error: " + error.message;
-            }
-        }
-
-        function parseInputToJSON(text) {
-            const lines = text.split(",");
-            const obj = {};
-            lines.forEach(line => {
-                const parts = line.split(":").map(x => x.trim());
-                if (parts.length === 2) {
-                    const rating = parseInt(parts[0]);
-                    const count = parseInt(parts[1]);
-                    if (!isNaN(rating) && !isNaN(count)) {
-                        obj[rating] = count;
-                    }
-                }
-            });
-            return obj;
-        }
-    </script>
-</body>
-</html>
+                  function parseInputToJSON(text) {
+                      const lines = text.split(',');
+                      const obj = {};
+                      lines.forEach(line => {
+                          const parts = line.split(':').map(x => x.trim());
+                          if (parts.length === 2) {
+                              const rating = parseInt(parts[0]);
+                              const count = parseInt(parts[1]);
+                              if (!isNaN(rating) && !isNaN(count)) {
+                                  obj[rating] = count;
+                              }
+                          }
+                      });
+                      return obj;
+                  }
+              })()
+            </script></div
+          ></div
+        ><h1 class="home-text10">⚡ SBC Bruteforcer Tool V1⚡</h1
+        ><span class="home-text11"
+          ><span
+            >This is a new project I started, and I have a lot of future ideas,
+            such as a +coins option. Check back frequently for
+            updates!&nbsp;</span
+          ><br /><br /><span
+            >If you have any suggestions or anything else, feel free to add to </span
+          ><a
+            href="https://github.com/ahmedt710/ahmedt710.github.io/discussions"
+            target="_blank"
+            rel="noreferrer noopener"
+            class="home-link"
+            >my discussion page</a
+          ><br /><br /><span
+            >How it works: right now, it strictly uses your inventory (no coins
+            yet). It will tell you the max amount of squads you can currently do
+            for a given SBC.&nbsp;</span
+          ><br /></span
+        ><h2 class="home-text20">Enter Your Current Inventory</h2
+        ><textarea
+          id="inventoryInput"
+          rows="10"
+          cols="50"
+          placeholder="Example: 88: 3, 89: 2, 90: 1"
+          class="home-textarea1 textarea"
+        ></textarea
+        ><h2 class="home-text21">Enter Squad Requirements</h2
+        ><textarea
+          id="sbcInput"
+          rows="5"
+          cols="50"
+          placeholder="Example: 90: 2, 89: 1"
+          class="textarea"
+        ></textarea
+        ><button onclick="submitToLambda()" class="button"
+          >Submit and Solve 🔥</button
+        ><pre id="results"></pre><h2>Results:</h2></div
+      ></div
+    >
+  </body></html
+>
