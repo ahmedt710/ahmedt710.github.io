@@ -91,8 +91,12 @@ async function submitToLambda() {
     const sbcText = document.getElementById('sbcInput').value;
     const resultsDiv = document.getElementById('results');
 
+    // Parse inventory and SBC input
     const inventory = parseInputToJSON(inventoryText);
     const sbcRequirements = parseInputToJSON(sbcText);
+
+    console.log('Parsed Inventory:', inventory);
+    console.log('Parsed SBC Requirements:', sbcRequirements);
 
     const payload = {
         inventory: inventory,
@@ -102,7 +106,7 @@ async function submitToLambda() {
     resultsDiv.innerHTML = 'Submitting... please wait 🔄';
 
     try {
-        const response = await fetch('https://your-api-id.amazonaws.com/build-squad', {
+        const response = await fetch('https://p4oaele4s43g4bgwubrxoy7eo40jalqx.lambda-url.us-east-2.on.aws/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,20 +114,15 @@ async function submitToLambda() {
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-            throw new Error(`API call failed with status ${response.status}`);
-        }
-
-        const result = await response.json();
+        const result = await response.json(); // <-- Always call .json() before checking result
         console.log('Lambda Response:', result);
 
-        resultsDiv.innerHTML = JSON.stringify(result, null, 2);
+        resultsDiv.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
     } catch (error) {
         console.error('Error sending to Lambda:', error);
-        resultsDiv.innerHTML = '❌ Error: ' + error.message;
+        resultsDiv.innerHTML = `❌ Error: ${error.message}`;
     }
 }
-
 function parseInputToJSON(text) {
     const lines = text.split(',');
     const obj = {};
